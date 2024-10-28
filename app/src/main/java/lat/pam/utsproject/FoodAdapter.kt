@@ -10,6 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 class FoodAdapter(private val foodList: List<Food>) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
+    private var listener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(food: Food)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_food, parent, false)
         return FoodViewHolder(view)
@@ -20,6 +30,10 @@ class FoodAdapter(private val foodList: List<Food>) : RecyclerView.Adapter<FoodA
         holder.foodName.text = food.name
         holder.foodDescription.text = food.description
         holder.foodImage.setImageResource(food.imageResourceId)
+
+        holder.itemView.setOnClickListener {
+            listener?.onItemClick(food)
+        }
     }
 
     override fun getItemCount(): Int {
